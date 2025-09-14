@@ -62,5 +62,12 @@ private struct Demo: View {
         }
         .border(.red)
         .frame(maxWidth: changeContainerWidth ? .infinity : 150)
+
+
+        PlacementThatFits(prefersViewThatFits: prefersViewThatFits) {
+            Color.yellow
+            Color.green
+        }
+        .frame(maxWidth: changeContainerWidth ? .infinity : 5)
     }
 }
