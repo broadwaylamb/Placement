@@ -49,23 +49,30 @@ struct PlacementThatFitsLayout: PlacementLayout {
         
         for index in subviews.indices {
             let subview = subviews[index]
+            let idealSize = subview.sizeThatFits(.unspecified)
             let size = subview.sizeThatFits(proposal)
-                        
+
             if axes.contains(.horizontal) && axes.contains(.vertical) {
-                if size.width <= (proposal.width ?? .infinity) && size.height <= (proposal.height ?? .infinity) {
+                if idealSize.width <= (proposal.width ?? .infinity) && idealSize.height <= (proposal.height ?? .infinity) {
                     coordinator.indexToPlace = index
                     return size
                 }
             } else if axes.contains(.horizontal) {
-                if size.width <= (proposal.width ?? .infinity) {
+                if idealSize.width <= (proposal.width ?? .infinity) {
                     coordinator.indexToPlace = index
                     return size
                 }
             } else if axes.contains(.vertical) {
-                if size.height <= (proposal.height ?? .infinity) {
+                if idealSize.height <= (proposal.height ?? .infinity) {
                     coordinator.indexToPlace = index
                     return size
                 }
+            }
+
+            if index == subviews.endIndex - 1 {
+                // If none of the subviews fit, return the last one
+                coordinator.indexToPlace = index
+                return size
             }
         }
         

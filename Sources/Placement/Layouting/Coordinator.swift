@@ -130,12 +130,15 @@ class Coordinator<L: PlacementLayout>: ObservableObject {
                 },
                 getSizeThatFits: { size in
                     let hostingController = self.makeHostingController(id: child.id)
-                    hostingController.rootView = AnyView(child)
-                                                            
+
+                    // Fix the view in its ideal size if the corresponding dimension
+                    // in the proposal is unspecified
+                    hostingController.rootView = AnyView(child.fixedSize(horizontal: size.width == nil, vertical: size.height == nil))
+
                     let sizeThatFits = hostingController.sizeThatFits(
                         in: CGSize(
-                            width: size.width ?? UIView.layoutFittingCompressedSize.width,
-                            height: size.height ?? UIView.layoutFittingCompressedSize.height
+                            width: size.width ?? .infinity,
+                            height: size.height ?? .infinity
                         )
                     )
                                                             
